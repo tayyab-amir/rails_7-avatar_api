@@ -1,0 +1,42 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/users/{id}/upload_avatar":
+    post:
+      summary: Upload a user avatar
+      tags:
+      - Users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: User ID
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Avatar upload in progress
+        '404':
+          description: User not found
+        '422':
+          description: Avatar file is missing
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+                  description: Avatar image file
+              required:
+              - avatar
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000

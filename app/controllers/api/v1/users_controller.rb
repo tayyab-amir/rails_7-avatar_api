@@ -8,7 +8,7 @@ class Api::V1::UsersController < ApplicationController
     @user = User.find(params[:id])
     base64_avatar = Base64.encode64(params[:avatar].read)
     AvatarWorkerJob.perform_async(@user.id, base64_avatar)
-    render json: { message: 'Avatar upload in progress' }
+    render json: { message: 'Avatar upload successfully' }
   end
 
   private
