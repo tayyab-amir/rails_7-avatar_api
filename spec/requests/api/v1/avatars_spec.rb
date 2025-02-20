@@ -1,6 +1,33 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/users', type: :request do
+  path '/api/v1/users' do
+    post 'Create a new user' do
+      tags 'Users'
+      consumes 'application/json'
+      produces 'application/json'
+
+      parameter name: :user, in: :body, schema: {
+        type: :object,
+        properties: {
+          name: { type: :string, example: 'John Doe' },
+          email: { type: :string, example: 'john@example.com' }
+        },
+        required: ['name', 'email']
+      }
+
+      response '201', 'User created successfully' do
+        let(:user) { { name: 'John Doe', email: 'john@example.com' } }
+        run_test!
+      end
+
+      response '422', 'Invalid request' do
+        let(:user) { { name: '' } } # Missing email
+        run_test!
+      end
+    end
+  end
+
   path '/api/v1/users/{id}/upload_avatar' do
     post 'Upload a user avatar' do
       tags 'Users'
